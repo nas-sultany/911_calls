@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import geopandas as gpd
+import descartes
+import plotly.express as px
+import datetime
 
 df = pd.read_csv('data/911.csv')
 
@@ -60,3 +64,33 @@ plt.figure()
 ax3 = sns.heatmap(accidents)
 ax3.set_title('Heatmap of Accidents by Time and Day of Week')
 plt.savefig('Accidents-Heatmap.png')
+
+# Get calls within a specific period
+start = datetime.date(2015, 12, 30)
+end = datetime.date(2016, 1, 1)
+df['Date'] = df['timeStamp'].apply(
+    lambda x: x.date())  # Add date column to dataframe
+# New dataframe with data from specified period
+period = df[((df['Date'] > start) & (df['Date'] < end))]
+
+fig = px.scatter_mapbox(period, lat="lat", lon="lng", color='Department', size='e', title='Calls on NYE 2015',
+                        hover_name="desc", hover_data={"lat": False, "lng": False, "e": False},
+                        color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10)
+
+# Use open-street-map (no mapbox token needed)
+fig.update_layout(mapbox_style="open-street-map")
+# Save interactive plot in html format
+fig.write_html('Calls-on-NYE-2015.html')
+
+
+# Isolate accidents within specified period
+accidents = period[period['Reason'] == 'VEHICLE ACCIDENT']
+
+fig = px.scatter_mapbox(accidents, lat="lat", lon="lng", color='Hour', size='e', title='Accidents on NYE 2015',
+                        hover_name="desc", hover_data={"lat": False, "lng": False, "e": False},
+                        color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10)
+
+# Use open-street-map (no mapbox token needed)
+fig.update_layout(mapbox_style="open-street-map")
+# Save interactive plot in html format
+fig.write_html('Accidents-on-NYE-2015.html')
