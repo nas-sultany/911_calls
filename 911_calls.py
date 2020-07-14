@@ -24,7 +24,7 @@ print(df['Department'].value_counts())
 plt.figure()  # start new figure
 ax = sns.countplot(x='Department', data=df)
 ax.set_title('911 Calls for Various Departments')
-plt.savefig('911_call_department.png')
+plt.savefig('plots/911_call_department.png')
 
 # Convert the timestamp column from string format to pandas DateTime objects
 df['timeStamp'] = pd.to_datetime(df['timeStamp'])
@@ -44,7 +44,7 @@ ax2 = sns.countplot(x='Day of Week', data=df,
 ax2.set_title('911 Calls by Day of Week')
 plt.legend(bbox_to_anchor=(1.0, 1), loc=2, borderaxespad=0.2)
 plt.tight_layout()
-plt.savefig('Calls-by-Day-of-Week.png')
+plt.savefig('plots/Calls-by-Day-of-Week.png')
 
 # Plot count of calls vs. month with hue based on Reason
 plt.figure()
@@ -52,7 +52,7 @@ ax3 = sns.countplot(x='Month', data=df, hue='Department', palette='viridis')
 ax3.set_title('911 Calls by Month')
 plt.legend(bbox_to_anchor=(1.0, 1), loc=2, borderaxespad=0.2)
 plt.tight_layout()
-plt.savefig('Calls-by-Month.png')
+plt.savefig('plots/Calls-by-Month.png')
 
 # Plot heatmap of vehicle accidents by day of week vs hours
 # create new column based on reason for calls
@@ -63,7 +63,7 @@ accidents = df[df['Reason'] == 'VEHICLE ACCIDENT'].groupby(
 plt.figure()
 ax3 = sns.heatmap(accidents)
 ax3.set_title('Heatmap of Accidents by Time and Day of Week')
-plt.savefig('Accidents-Heatmap.png')
+plt.savefig('plots/Accidents-Heatmap.png')
 
 # Get calls within a specific period
 start = datetime.date(2015, 12, 30)
@@ -80,7 +80,7 @@ fig = px.scatter_mapbox(period, lat="lat", lon="lng", color='Department', size='
 # Use open-street-map (no mapbox token needed)
 fig.update_layout(mapbox_style="open-street-map")
 # Save interactive plot in html format
-fig.write_html('Calls-on-NYE-2015.html')
+fig.write_html('plots/Calls-on-NYE-2015.html')
 
 
 # Isolate accidents within specified period
@@ -93,4 +93,4 @@ fig = px.scatter_mapbox(accidents, lat="lat", lon="lng", color='Hour', size='e',
 # Use open-street-map (no mapbox token needed)
 fig.update_layout(mapbox_style="open-street-map")
 # Save interactive plot in html format
-fig.write_html('Accidents-on-NYE-2015.html')
+fig.write_html('plots/Accidents-on-NYE-2015.html')
